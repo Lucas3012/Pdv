@@ -1,35 +1,29 @@
 #!/bin/bash
 
-# --- CONFIGURAÇÃO ---
-# Se você ainda não configurou seu Git, descomente as linhas abaixo e coloque seus dados
-# git config --global user.email "seu-email@exemplo.com"
-# git config --global user.name "Seu Nome"
-
 echo "------------------------------------------"
-echo "🚀 Iniciando Processo de Deploy e Servidor"
+echo "🔄 Ajustando segurança e Sincronizando..."
 echo "------------------------------------------"
 
-# 1. Fazendo o Push para o GitHub
-echo "📂 Adicionando arquivos ao Git..."
+# Desativa verificação de SSL para evitar o erro TLS no Termux
+git config http.sslVerify false
+
+# Tenta puxar novidades
+git pull origin main --rebase
+
+# Adiciona e faz o commit
 git add .
-
-echo "📝 Criando commit..."
-read -p "Digite a mensagem do commit (ou aperte Enter para 'update'): " msg
-if [ -z "$msg" ]; then
-    msg="update"
-fi
+read -p "Mensagem do commit: " msg
+if [ -z "$msg" ]; then msg="ajustes sistema $(date +'%H:%M')"; fi
 git commit -m "$msg"
 
-echo "⬆️ Enviando para o GitHub..."
-git push
+# Envia
+if git push origin main; then
+    echo "✅ GitHub atualizado com sucesso!"
+else
+    echo "❌ Erro no push. Tentando forçar..."
+    git push origin main --force
+fi
 
 echo "------------------------------------------"
-echo "✅ GitHub atualizado com sucesso!"
-echo "------------------------------------------"
-
-# 2. Iniciando o servidor Node.js
-echo "🌐 Iniciando servidor Node.js..."
-echo "Acesse em: http://localhost:3000"
-echo "------------------------------------------"
-
+echo "🌐 Iniciando servidor PDV..."
 node server.js
