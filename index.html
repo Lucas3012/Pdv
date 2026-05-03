@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SistOS Neon Pro - PDV</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --bg-dark: #0a0b10;
+            --card-bg: #161b22;
+            --text: #e6edf3;
+            --success: #00ff88;
+            --danger: #ff0055;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            background: rgba(22, 27, 34, 0.95);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 0 15px var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        #btn-menu {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* --- SIDEBAR --- */
+        #sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: var(--card-bg);
+            transition: 0.3s;
+            padding-top: 80px;
+            z-index: 999;
+            border-right: 1px solid var(--secondary);
+        }
+
+        #sidebar.active { left: 0; }
+
+        .nav-link {
+            padding: 15px 25px;
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid #30363d;
+            cursor: pointer;
+        }
+
+        .nav-link:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* --- CONTENT AREA --- */
+        main { padding: 20px; max-width: 1200px; margin: auto; }
+
+        .section-container {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { margin-bottom: 20px; font-family: 'Orbitron', sans-serif; font-size: 1.5rem; }
+
+        /* --- CARDS & TABLES --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+            text-align: center;
+        }
+
+        .card h3 { font-size: 0.9rem; opacity: 0.8; }
+        .card p { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
+
+        .table-responsive { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #30363d; }
+        th { background: #21262d; color: var(--primary); }
+
+        .badge {
+            background: var(--secondary);
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* --- FORMS & BUTTONS --- */
+        .btn-main {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .pdv-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .pdv-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .pdv-box button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- MOBILE ADJUSTMENTS --- */
+        @media (max-width: 600px) {
+            .logo { font-size: 1rem; }
+            th, td { font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">SISTOS NEON PRO</div>
+        <button id="btn-menu"><i class="fas fa-bars"></i></button>
+    </header>
+
+    <nav id="sidebar">
+        <div class="nav-link" onclick="showSection('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</div>
+        <div class="nav-link" onclick="showSection('produtos')"><i class="fas fa-box"></i> Estoque</div>
+        <div class="nav-link" onclick="showSection('entrada')"><i class="fas fa-plus-circle"></i> Entrada</div>
+        <div class="nav-link" onclick="showSection('saida')"><i class="fas fa-shopping-cart"></i> Venda (Saída)</div>
+        <div class="nav-link" onclick="showSection('historico')"><i class="fas fa-history"></i> Histórico</div>
+        <div class="nav-link" onclick="showSection('adm')"><i class="fas fa-user-shield"></i> Admin</div>
+    </nav>
+
+    <main id="content">
+        <div class="section-container">
+            <h1>Carregando sistema...</h1>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
