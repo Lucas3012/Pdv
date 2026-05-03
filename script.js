@@ -1,5 +1,5 @@
 // O ficheiro iniciar.sh irá preencher esta variável automaticamente entre as aspas
-const BASE_URL = 'https://tumor-personals-season-pic.trycloudflare.com';
+const BASE_URL = 'https://summer-diy-copyrights-save.trycloudflare.com';
 
 /**
  * Função Inteligente de URL
