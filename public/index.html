@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDV Profissional</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="menu-toggle" id="btn-menu">
+            <span>☰</span>
+        </div>
+        <div class="logo">PDV <span>LOCAL</span></div>
+    </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">MENU</div>
+        <a href="#" onclick="showSection('dashboard')">📊 Dashboard</a>
+        <a href="#" onclick="showSection('entrada')">📥 Entrada</a>
+        <a href="#" onclick="showSection('saida')">🛒 Saída (Venda)</a>
+        <a href="#" onclick="showSection('produtos')">📦 Produtos</a>
+        <a href="#" onclick="showSection('historico')">📜 Histórico</a>
+        <div style="border-top: 1px solid #444; margin: 10px 0;"></div>
+        <a href="#" onclick="showSection('adm')" style="color: #ff7675;">⚙️ Painel ADM</a>
+    </div>
+
+    <main id="content"></main>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
