@@ -6,11 +6,11 @@
     <title>SistOS Neon Pro - PDV</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
         :root {
@@ -21,6 +21,7 @@
             --text: #e6edf3;
             --success: #00ff88;
             --danger: #ff0055;
+            --neon-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,7 +33,7 @@
             overflow-x: hidden;
         }
 
-        /* --- HEADER & NAVIGATION --- */
+        /* --- CABEÇALHO --- */
         header {
             background: rgba(22, 27, 34, 0.95);
             padding: 15px 20px;
@@ -40,7 +41,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid var(--primary);
-            box-shadow: 0 0 15px var(--primary);
+            box-shadow: var(--neon-shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
@@ -48,9 +49,10 @@
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--primary);
-            text-shadow: 0 0 10px var(--primary);
+            text-shadow: 0 0 8px var(--primary);
+            letter-spacing: 1px;
         }
 
         #btn-menu {
@@ -61,15 +63,15 @@
             cursor: pointer;
         }
 
-        /* --- SIDEBAR --- */
+        /* --- BARRA LATERAL --- */
         #sidebar {
             position: fixed;
-            left: -250px;
+            left: -260px;
             top: 0;
             width: 250px;
             height: 100%;
             background: var(--card-bg);
-            transition: 0.3s;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             padding-top: 80px;
             z-index: 999;
             border-right: 1px solid var(--secondary);
@@ -78,115 +80,143 @@
         #sidebar.active { left: 0; }
 
         .nav-link {
-            padding: 15px 25px;
-            display: block;
+            padding: 16px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
             color: var(--text);
             text-decoration: none;
             border-bottom: 1px solid #30363d;
             cursor: pointer;
+            transition: 0.2s;
         }
+
+        .nav-link i { color: var(--primary); width: 20px; }
 
         .nav-link:hover {
-            background: var(--secondary);
-            color: white;
+            background: rgba(112, 0, 255, 0.2);
+            color: var(--primary);
+            padding-left: 35px;
         }
 
-        /* --- CONTENT AREA --- */
+        /* --- ÁREA PRINCIPAL --- */
         main { padding: 20px; max-width: 1200px; margin: auto; }
 
         .section-container {
-            animation: fadeIn 0.5s ease;
+            animation: slideUp 0.4s ease-out;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        h1 { margin-bottom: 20px; font-family: 'Orbitron', sans-serif; font-size: 1.5rem; }
+        h1 { margin-bottom: 25px; font-family: 'Orbitron', sans-serif; font-size: 1.4rem; border-left: 4px solid var(--secondary); padding-left: 10px; }
 
-        /* --- CARDS & TABLES --- */
+        /* --- DASHBOARD CARDS --- */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .card {
             background: var(--card-bg);
             padding: 20px;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary);
+            border-radius: 12px;
+            border: 1px solid #30363d;
             text-align: center;
-        }
-
-        .card h3 { font-size: 0.9rem; opacity: 0.8; }
-        .card p { font-size: 1.8rem; font-weight: bold; margin-top: 5px; }
-
-        .table-responsive { overflow-x: auto; }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--card-bg);
-            border-radius: 8px;
+            position: relative;
             overflow: hidden;
         }
 
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #30363d; }
-        th { background: #21262d; color: var(--primary); }
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 3px;
+            background: var(--primary);
+        }
+
+        .card h3 { font-size: 0.8rem; text-transform: uppercase; opacity: 0.7; margin-bottom: 8px; }
+        .card p { font-size: 2rem; font-weight: bold; color: #fff; }
+
+        /* --- TABELAS --- */
+        .table-responsive { 
+            overflow-x: auto; 
+            background: var(--card-bg); 
+            border-radius: 10px; 
+            border: 1px solid #30363d;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th { 
+            background: #21262d; 
+            color: var(--primary); 
+            text-align: left; 
+            padding: 15px; 
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        td { padding: 15px; border-bottom: 1px solid #30363d; font-size: 0.95rem; }
 
         .badge {
-            background: var(--secondary);
-            padding: 4px 8px;
-            border-radius: 5px;
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--primary);
             font-size: 0.8rem;
         }
 
-        /* --- FORMS & BUTTONS --- */
+        /* --- BOTÕES --- */
         .btn-main {
-            background: var(--secondary);
+            background: linear-gradient(45deg, var(--secondary), #9000ff);
             color: white;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            padding: 14px;
+            border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: bold;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 4px 15px rgba(112, 0, 255, 0.3);
         }
 
+        .btn-main:active { transform: scale(0.98); }
+
+        /* --- FORMULÁRIOS PDV --- */
         .pdv-box {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid var(--secondary);
         }
+
+        .pdv-box label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary); }
 
         .pdv-box input {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            padding: 14px;
+            margin-bottom: 20px;
             background: #0d1117;
             border: 1px solid #30363d;
             color: white;
-            border-radius: 5px;
+            border-radius: 8px;
+            outline: none;
         }
 
-        .pdv-box button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
+        .pdv-box input:focus { border-color: var(--primary); }
 
-        /* --- MOBILE ADJUSTMENTS --- */
+        /* --- AJUSTES MOBILE --- */
         @media (max-width: 600px) {
-            .logo { font-size: 1rem; }
-            th, td { font-size: 0.85rem; }
+            header { padding: 12px 15px; }
+            .logo { font-size: 0.9rem; }
+            main { padding: 15px; }
+            th, td { padding: 10px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -198,17 +228,18 @@
     </header>
 
     <nav id="sidebar">
-        <div class="nav-link" onclick="showSection('dashboard')"><i class="fas fa-chart-line"></i> Dashboard</div>
-        <div class="nav-link" onclick="showSection('produtos')"><i class="fas fa-box"></i> Estoque</div>
-        <div class="nav-link" onclick="showSection('entrada')"><i class="fas fa-plus-circle"></i> Entrada</div>
-        <div class="nav-link" onclick="showSection('saida')"><i class="fas fa-shopping-cart"></i> Venda (Saída)</div>
-        <div class="nav-link" onclick="showSection('historico')"><i class="fas fa-history"></i> Histórico</div>
-        <div class="nav-link" onclick="showSection('adm')"><i class="fas fa-user-shield"></i> Admin</div>
+        <div class="nav-link" onclick="showSection('dashboard')"><i class="fas fa-th-large"></i> Dashboard</div>
+        <div class="nav-link" onclick="showSection('produtos')"><i class="fas fa-boxes"></i> Estoque</div>
+        <div class="nav-link" onclick="showSection('entrada')"><i class="fas fa-arrow-down"></i> Entrada</div>
+        <div class="nav-link" onclick="showSection('saida')"><i class="fas fa-shopping-cart"></i> Venda / Saída</div>
+        <div class="nav-link" onclick="showSection('historico')"><i class="fas fa-list-ul"></i> Histórico</div>
+        <div class="nav-link" onclick="showSection('adm')"><i class="fas fa-cog"></i> Configurações</div>
     </nav>
 
     <main id="content">
-        <div class="section-container">
-            <h1>Carregando sistema...</h1>
+        <div class="section-container" style="text-align: center; margin-top: 50px;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+            <p style="margin-top: 15px;">Conectando ao Termux...</p>
         </div>
     </main>
 
