@@ -1,5 +1,5 @@
 // O link será injetado pelo iniciar.sh nesta variável
-const BASE_URL = 'https://historical-boat-module-techno.trycloudflare.com';
+const BASE_URL = 'https://config-weddings-daughters-dishes.trycloudflare.com';
 
 // Resolve a URL dependendo de onde o sistema está rodando
 function getUrl(endpoint) {
